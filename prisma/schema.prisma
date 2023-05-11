@@ -1,0 +1,79 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  READ_ONLY
+  READ_WRITE
+  ADMIN
+}
+
+model User {
+  id                   String                @id @default(uuid())
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  email                String                @unique
+  name                 String?
+  avatar               String?
+  workspaces           Workspace[]           @relation("WorkspaceUser")
+  workspaceMemberships WorkspaceMembership[]
+  ownedWorkspaces      Workspace[]           @relation("WorkspaceOwner")
+}
+
+model Workspace {
+  id          String                @id @default(uuid())
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  name        String
+  owner       User                  @relation("WorkspaceOwner", fields: [ownerId], references: [id])
+  ownerId     String
+  users       User[]                @relation("WorkspaceUser")
+  memberships WorkspaceMembership[]
+  folders     Folder[]
+  Invitation  Invitation[]
+}
+
+model Folder {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId String
+  notes       Note[]    @relation("FolderNote")
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  content   String
+  folder    Folder   @relation("FolderNote", fields: [folderId], references: [id])
+  folderId  String
+}
+
+model WorkspaceMembership {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  role        Role      @default(READ_ONLY)
+  user        User      @relation(fields: [userId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  userId      String
+  workspaceId String
+}
+
+model Invitation {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  email       String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId String
+}
