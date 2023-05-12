@@ -13,6 +13,12 @@ enum Role {
   ADMIN
 }
 
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model User {
   id                   String                @id @default(uuid())
   createdAt            DateTime              @default(now())
@@ -54,6 +60,7 @@ model Note {
   updatedAt DateTime @updatedAt
   title     String
   content   String
+  priority  Priority @default(LOW)
   folder    Folder   @relation("FolderNote", fields: [folderId], references: [id])
   folderId  String
 }
