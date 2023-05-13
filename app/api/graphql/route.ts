@@ -1,30 +1,17 @@
+import { schema } from "@/graphql/schema";
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import gql from "graphql-tag";
 import { NextRequest } from "next/server";
 
-const resolvers = {
-  Query: {
-    hello: () => "world",
-  },
-};
+const server = new ApolloServer({ schema });
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
-
-const server = new ApolloServer({
-  resolvers,
-  typeDefs,
-});
-
-// export default startServerAndCreateNextHandler(server);
-// const handler = startServerAndCreateNextHandler(server);
 const handler = startServerAndCreateNextHandler<NextRequest>(server, {
   context: async (req) => ({ req }),
 });
+
+export const bodyParser = true;
+// // export const cors = true;
 
 export async function GET(request: NextRequest) {
   return handler(request);

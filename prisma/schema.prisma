@@ -7,6 +7,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator pothos {
+  provider     = "prisma-pothos-types"
+  clientOutput = "@prisma/client"
+  output       = "./pothos-types.ts"
+}
+
 enum Role {
   READ_ONLY
   READ_WRITE
