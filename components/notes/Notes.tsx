@@ -24,25 +24,9 @@ const Notes = (props: Props) => {
     return EditorState.createEmpty();
   });
 
-  const [rawHTML, setRawHTML] = React.useState("");
-
   const handleOnchangeEditor = (editorState: EditorState) => {
     setEditorState(editorState);
-    setRawHTML(draftToHtml(convertToRaw(editorState?.getCurrentContent())));
   };
-
-  useEffect(() => {
-    const blocksFromHtml = convertFromHTML(rawHTML);
-    const state = ContentState.createFromBlockArray(
-      blocksFromHtml.contentBlocks,
-      blocksFromHtml.entityMap
-    );
-    setEditorState(EditorState.createWithContent(state));
-  }, [rawHTML]);
-
-  useEffect(() => {
-    setRawHTML(note.content);
-  }, []);
 
   return (
     <>

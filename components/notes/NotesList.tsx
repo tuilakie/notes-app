@@ -22,7 +22,7 @@ const NotesList = (props: Props) => {
             </button>
           </div>
           <ul className="flex flex-col gap-2 max-h-[720px] overflow-y-auto">
-            {Array.from({ length: 5 }).map((_, i) => (
+            {Array.from({ length: 15 }).map((_, i) => (
               <li key={i}>
                 <button className="px-6 py-3 w-full font-normal text-lg text-left rounded-lg shadow-lg hover:opacity-90 bg-white dark:bg-gray-800 text-black">
                   New Notes
