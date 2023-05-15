@@ -1,21 +1,29 @@
 "use client";
 import React from "react";
+import { useParams, useRouter, usePathname } from "next/navigation";
 
-type Props = {};
+type Props = {
+  folderName: string;
+  folderId: string;
+};
 
 const Folder = (props: Props) => {
-  const [active, setActive] = React.useState(false);
+  const { folderId, workspaceId } = useParams();
+  const router = useRouter();
+
   return (
     <button
       className={
-        "px-6 py-3 w-full font-normal text-lg text-left rounded-lg shadow-lg hover:opacity-90" +
-        (active
+        "px-6 py-4 w-full font-normal text-lg text-left rounded-lg shadow-lg hover:opacity-90" +
+        (folderId === props.folderId
           ? " bg-orange-300 dark:bg-gray-700 text-black"
           : " bg-white dark:bg-gray-800 text-black")
       }
-      onClick={() => setActive(!active)}
+      onClick={() => {
+        router.push(`workspace/${workspaceId}/folder/${props.folderId}`);
+      }}
     >
-      New Folders
+      {props.folderName}
     </button>
   );
 };

@@ -1,41 +1,32 @@
 "use client";
-import React, { use, useEffect } from "react";
-import {
-  ContentState,
-  EditorState,
-  convertFromHTML,
-  convertToRaw,
-} from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import draftToHtml from "draftjs-to-html";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import React from "react";
+import { useParams, useRouter, usePathname } from "next/navigation";
 
-type Props = {};
-const note = {
-  id: "1",
-  title: "Note 1",
-  content: "This is the content of note 1",
-  createdAt: new Date(),
-  updatedAt: new Date(),
+type Props = {
+  noteId: string;
+  noteTitle: string;
 };
 
 const Notes = (props: Props) => {
-  const [editorState, setEditorState] = React.useState(() => {
-    return EditorState.createEmpty();
-  });
-
-  const handleOnchangeEditor = (editorState: EditorState) => {
-    setEditorState(editorState);
-  };
+  const { noteId, folderId, workspaceId } = useParams();
+  const router = useRouter();
 
   return (
-    <>
-      <Editor
-        editorState={editorState}
-        onEditorStateChange={handleOnchangeEditor}
-        placeholder="Write something..."
-      />
-    </>
+    <button
+      className={
+        "px-6 py-4 w-full font-normal text-lg text-left rounded-lg shadow-lg hover:opacity-90" +
+        (noteId === props.noteId
+          ? " bg-orange-300 dark:bg-gray-700 text-black"
+          : " bg-white dark:bg-gray-800 text-black")
+      }
+      onClick={() => {
+        router.push(
+          `workspace/${workspaceId}/folder/${folderId}/note/${props.noteId}`
+        );
+      }}
+    >
+      {props.noteTitle}
+    </button>
   );
 };
 

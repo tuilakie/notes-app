@@ -1,6 +1,7 @@
 import Header from "@/components/layout/Header";
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { GraphQlProvider } from "@/components/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +19,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="bg-white dark:bg-slate-800 min-h-screen p-1">
-          <Header />
-          <div className="container mx-auto py-2">{children}</div>
+          {
+            <>
+              <Header />
+              <div className="container mx-auto py-2">
+                <GraphQlProvider>{children}</GraphQlProvider>
+              </div>
+            </>
+          }
         </div>
       </body>
     </html>
