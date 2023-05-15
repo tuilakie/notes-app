@@ -41,8 +41,7 @@ const UserMenu = (props: Props) => {
         className="absolute z-50 top-full text-center right-0 mt-1 rounded-lg shadow-lg bg-gray-400 text-white font-semibold opacity-70"
         style={{ width: "200px", display: isOpened ? "block" : "none" }}
       >
-        <div className="py-2 px-4 w-full border-b-2">
-          {/* swith button */}
+        {/* <div className="py-2 px-4 w-full border-b-2">
           <div className="flex justify-around items-center duration-200 rounded-lg border-2">
             <button
               className="flex-1 border-r-2 dark:bg-rose-300"
@@ -59,19 +58,19 @@ const UserMenu = (props: Props) => {
               Light
             </button>
           </div>
-        </div>
+        </div> */}
         <button
           className="py-2 px-4 w-full border-b-2"
           onClick={handleOnClickLogout}
         >
           Log out
         </button>
-        <button
+        {/* <button
           className="py-2 px-4 w-full border-b-2"
           onClick={handleOnClickAboutMe}
         >
           About me
-        </button>
+        </button> */}
       </div>
     </div>
   );

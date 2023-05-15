@@ -1,3 +1,4 @@
+"use client";
 import gql from "graphql-tag";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";

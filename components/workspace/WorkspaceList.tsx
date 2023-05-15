@@ -4,6 +4,8 @@ import gql from "graphql-tag";
 import React from "react";
 
 import { useRouter } from "next/navigation";
+import { FiFolderPlus } from "react-icons/fi";
+import Workspace from "./WorkSpace";
 
 type Props = {
   userId: string;
@@ -28,21 +30,29 @@ const WorkspaceList = (props: Props) => {
   const router = useRouter();
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-md shadow-lg p-4 overflow-x-auto">
+    <div className="bg-white dark:bg-gray-800 flex flex-row justify-between rounded-md shadow-lg p-4 overflow-x-auto">
       <ul className="flex flex-row gap-2 ">
         {data?.user?.workspaces?.map((workspace: any) => (
           <li key={workspace.id}>
-            <button
-              onClick={() => {
-                router.push(`/workspace/${workspace.id}`);
-              }}
-              className="whitespace-nowrap px-6 py-3 font-normal text-lg text-left rounded-lg shadow-lg hover:opacity-90 bg-white dark:bg-gray-800 text-black"
-            >
-              {workspace.name}
-            </button>
+            <Workspace
+              workspaceName={workspace.name}
+              workspaceId={workspace.id}
+            />
           </li>
         ))}
       </ul>
+      <button
+        onClick={() => {
+          // router.push(`/workspace/create`);
+          console.log("create workspace");
+        }}
+        className="relative max-h-1 text-black p-1 rounded-md group"
+      >
+        <FiFolderPlus className="text-2xl" />
+        <div className="absolute z-1 invisible group-hover:visible bg-gray-400 right-full bot-full text-black text-xs rounded-sm shadow-lg p-1">
+          Create workspace
+        </div>
+      </button>
     </div>
   );
 };

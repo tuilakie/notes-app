@@ -5,6 +5,7 @@ import Notes from "./Notes";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import NoteText from "./NoteText";
+import { toast } from "react-hot-toast";
 
 type Props = {
   folderId: string;

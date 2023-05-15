@@ -4,6 +4,7 @@ import { FiFolderPlus } from "react-icons/fi";
 import Folder from "./Folder";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
+import { toast } from "react-hot-toast";
 
 type Props = {
   workspaceId: string;
