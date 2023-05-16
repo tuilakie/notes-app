@@ -64,7 +64,6 @@ model Note {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  title     String
   content   String
   priority  Priority @default(LOW)
   folder    Folder   @relation("FolderNote", fields: [folderId], references: [id])

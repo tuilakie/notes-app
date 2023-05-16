@@ -6,6 +6,7 @@ import { FiFolderPlus } from "react-icons/fi";
 import Workspace from "./WorkSpace";
 import Link from "next/link";
 import { GET_WORKSPACES_BY_USERID } from "./workspace.query";
+import { toast } from "react-hot-toast";
 
 type Props = {
   userId: string;
@@ -15,6 +16,14 @@ const WorkspaceList = (props: Props) => {
   const { userId } = props;
   const { data, loading, error } = useQuery(GET_WORKSPACES_BY_USERID, {
     variables: { userId: userId },
+    onCompleted: (data) => {
+      if (data?.user?.workspaces?.length === 0) {
+        toast.success("You don't have any workspace yet");
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
   const pathname = usePathname();
 

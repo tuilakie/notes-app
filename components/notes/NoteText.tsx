@@ -12,6 +12,7 @@ import { gql, useQuery } from "@apollo/client";
 import dynamic from "next/dynamic";
 import { EditorProps } from "react-draft-wysiwyg";
 import { useParams } from "next/navigation";
+import { GET_NOTE_BY_ID } from "./notes.query";
 const Editor = dynamic<EditorProps>(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
   { ssr: false }
@@ -26,17 +27,7 @@ const NoteText = (props: Props) => {
 
   const { noteId } = useParams();
 
-  const getNotes = gql`
-    query Note($noteId: ID!) {
-      note(id: $noteId) {
-        content
-        id
-        title
-      }
-    }
-  `;
-
-  const { data, loading, error } = useQuery(getNotes, {
+  const { data, loading, error } = useQuery(GET_NOTE_BY_ID, {
     variables: { noteId },
   });
 

@@ -4,10 +4,10 @@ builder.prismaObject("WorkspaceMembership", {
   fields: (t) => ({
     id: t.exposeID("id"),
     createdAt: t.expose("createdAt", {
-      type: "Date",
+      type: "DateTime",
     }),
     updatedAt: t.expose("updatedAt", {
-      type: "Date",
+      type: "DateTime",
     }),
     role: t.exposeString("role"),
     user: t.relation("user"),

@@ -84,31 +84,26 @@ async function main() {
     data: [
       {
         id: "1",
-        title: "Example Note",
         content: "Example Note Content",
         folderId: "1",
       },
       {
         id: "2",
-        title: "Example Note 2",
         content: "Example Note Content 2",
         folderId: "1",
       },
       {
         id: "3",
-        title: "Example Note 3",
         content: "Example Note Content 3",
         folderId: "1",
       },
       {
         id: "4",
-        title: "Example Note 4",
         content: "Example Note Content 4",
         folderId: "1",
       },
       {
         id: "5",
-        title: "Example Note 5",
         content: "Example Note Content 5",
         folderId: "1",
       },

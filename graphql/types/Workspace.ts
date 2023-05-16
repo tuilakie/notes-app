@@ -5,10 +5,10 @@ builder.prismaObject("Workspace", {
   fields: (t) => ({
     id: t.exposeID("id"),
     createdAt: t.expose("createdAt", {
-      type: "Date",
+      type: "DateTime",
     }),
     updatedAt: t.expose("updatedAt", {
-      type: "Date",
+      type: "DateTime",
     }),
     name: t.exposeString("name"),
     owner: t.relation("owner"),
@@ -43,6 +43,9 @@ builder.queryFields((t) => ({
     resolve: async (query, parent, args, ctx, info) => {
       return prisma.workspace.findMany({
         ...query,
+        orderBy: {
+          createdAt: "asc",
+        },
       });
     },
   }),

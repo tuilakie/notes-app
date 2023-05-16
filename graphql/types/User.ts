@@ -4,10 +4,10 @@ builder.prismaObject("User", {
   fields: (t) => ({
     id: t.exposeID("id"),
     createdAt: t.expose("createdAt", {
-      type: "Date",
+      type: "DateTime",
     }),
     updatedAt: t.expose("updatedAt", {
-      type: "Date",
+      type: "DateTime",
     }),
     email: t.exposeString("email"),
     name: t.exposeString("name", { nullable: true }),

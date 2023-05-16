@@ -2,32 +2,57 @@
 import React from "react";
 import { FiFilePlus } from "react-icons/fi";
 import Notes from "./Notes";
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/client";
-import NoteText from "./NoteText";
-import { toast } from "react-hot-toast";
+import { useMutation, useQuery } from "@apollo/client";
+import toast from "react-hot-toast";
+import { GET_NOTES_BY_FOLDERID } from "./notes.query";
+import { CREATE_NOTE } from "./notes.mutation";
 
 type Props = {
   folderId: string;
 };
 
-const query = gql`
-  query ($folderId: ID!) {
-    folder(id: $folderId) {
-      notes {
-        id
-        content
-        title
-      }
-      name
-    }
-  }
-`;
-
 const NotesList = (props: Props) => {
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery(GET_NOTES_BY_FOLDERID, {
     variables: { folderId: props.folderId },
+    onCompleted: (data) => {
+      if (data?.folder?.notes?.length === 0) {
+        toast.success("You don't have any notes yet");
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
+
+  const [createNotes] = useMutation(CREATE_NOTE);
+
+  const handleCreateNotes = () => {
+    toast.promise(
+      createNotes({
+        variables: {
+          folderId: props.folderId,
+          content: "",
+        },
+        refetchQueries: [
+          {
+            query: GET_NOTES_BY_FOLDERID,
+            variables: { folderId: props.folderId },
+          },
+        ],
+      }),
+      {
+        loading: "Creating notes...",
+        success: (data) => {
+          return "Notes created";
+        },
+        error: (error) => {
+          return error.message;
+        },
+      }
+    );
+  };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <>
@@ -35,7 +60,7 @@ const NotesList = (props: Props) => {
         <div className="flex justify-between items-center">
           <div>NotesList</div>
           <button
-            type="button"
+            onClick={handleCreateNotes}
             className="relative text-white  focus:ring-1 focus:outline-none focus:ring-blue-300 p-1 rounded-md group"
           >
             <FiFilePlus className="text-2xl" />
@@ -47,7 +72,11 @@ const NotesList = (props: Props) => {
         <ul className="flex flex-col gap-2 max-h-[720px] overflow-y-auto">
           {data?.folder?.notes?.map((note: any) => (
             <li key={note.id}>
-              <Notes noteTitle={note.title} noteId={note.id} />
+              <Notes
+                noteId={note.id}
+                noteContent={note.content}
+                updatedAt={note.updatedAt}
+              />
             </li>
           ))}
         </ul>

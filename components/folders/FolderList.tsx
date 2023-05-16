@@ -6,6 +6,7 @@ import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GET_FOLDER_BY_WORKSPACEID } from "./folder.query";
+import toast from "react-hot-toast";
 
 type Props = {
   workspaceId: string;
@@ -15,8 +16,18 @@ const FolderList = (props: Props) => {
   const { workspaceId } = props;
   const { data, loading, error } = useQuery(GET_FOLDER_BY_WORKSPACEID, {
     variables: { workspaceId: workspaceId },
+    onCompleted: (data) => {
+      if (data?.workspace?.folders?.length === 0) {
+        toast.success("You don't have any folder yet");
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
   const pathname = usePathname();
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <>

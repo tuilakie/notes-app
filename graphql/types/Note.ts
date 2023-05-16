@@ -4,12 +4,11 @@ builder.prismaObject("Note", {
   fields: (t) => ({
     id: t.exposeID("id"),
     createdAt: t.expose("createdAt", {
-      type: "Date",
+      type: "DateTime",
     }),
     updatedAt: t.expose("updatedAt", {
-      type: "Date",
+      type: "DateTime",
     }),
-    title: t.exposeString("title"),
     content: t.exposeString("content"),
     priority: t.exposeString("priority"),
     folder: t.relation("folder"),
@@ -49,9 +48,6 @@ builder.mutationFields((t) => ({
   createNote: t.prismaField({
     type: "Note",
     args: {
-      title: t.arg.string({
-        required: true,
-      }),
       content: t.arg.string({
         required: true,
       }),
@@ -63,7 +59,6 @@ builder.mutationFields((t) => ({
       return prisma.note.create({
         ...query,
         data: {
-          title: args.title,
           content: args.content,
           folder: {
             connect: {
@@ -80,9 +75,6 @@ builder.mutationFields((t) => ({
       id: t.arg.id({
         required: true,
       }),
-      title: t.arg.string({
-        required: false,
-      }),
       content: t.arg.string({
         required: false,
       }),
@@ -94,7 +86,6 @@ builder.mutationFields((t) => ({
           id: args.id.toString(),
         },
         data: {
-          title: args.title || undefined,
           content: args.content || undefined,
         },
       });

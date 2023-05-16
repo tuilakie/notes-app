@@ -4,11 +4,11 @@ import type PrismaTypes from "@pothos/plugin-prisma/generated";
 import ValidationPlugin from "@pothos/plugin-validation";
 import prisma from "@/lib/prisma";
 
-import { DateResolver } from "graphql-scalars";
+import { DateResolver, DateTimeResolver } from "graphql-scalars";
 
 export const builder = new SchemaBuilder<{
   Scalars: {
-    Date: {
+    DateTime: {
       Input: Date;
       Output: Date;
     };
@@ -28,7 +28,7 @@ export const builder = new SchemaBuilder<{
   },
 });
 
-builder.addScalarType("Date", DateResolver, {});
+builder.addScalarType("DateTime", DateTimeResolver, {});
 
 builder.queryType({
   fields: (t) => ({
