@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { GraphQlProvider } from "@/components/provider";
 import { Toaster } from "react-hot-toast";
+import Modal from "@/components/Modal/Modal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,9 +24,12 @@ export default function RootLayout({
           {
             <>
               <Header />
-              <Toaster />
               <div className="container mx-auto py-2">
-                <GraphQlProvider>{children}</GraphQlProvider>
+                <GraphQlProvider>
+                  <Toaster />
+                  <Modal />
+                  {children}
+                </GraphQlProvider>
               </div>
             </>
           }

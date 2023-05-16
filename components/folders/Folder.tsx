@@ -2,6 +2,7 @@
 import React from "react";
 import { useParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { IoClose } from "react-icons/io5";
 
 type Props = {
   folderName: string;
@@ -10,7 +11,7 @@ type Props = {
 
 const Folder = (props: Props) => {
   const { folderId, workspaceId } = useParams();
-  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     // <button
@@ -29,13 +30,18 @@ const Folder = (props: Props) => {
     <Link
       href={`/workspace/${workspaceId}/folder/${props.folderId}`}
       className={
-        " block px-6 py-4 w-full font-normal text-lg text-left rounded-lg shadow-lg hover:opacity-90" +
+        " relative block px-6 py-4 w-full font-normal text-lg text-left rounded-lg truncate shadow-lg hover:opacity-90" +
         (folderId === props.folderId
           ? " bg-orange-300 dark:bg-gray-700 text-black"
           : " bg-white dark:bg-gray-800 text-black")
       }
     >
-      {props.folderName}
+      <span className="text-xl">{props.folderName}</span>
+      <Link
+        href={`${pathname}?popup=folder&action=delete&arg=${props.folderId}`}
+      >
+        <IoClose className="text-xl absolute right-1 top-1 hover:text-rose-300" />
+      </Link>
     </Link>
   );
 };

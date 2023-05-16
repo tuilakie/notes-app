@@ -2,45 +2,35 @@
 import React from "react";
 import { FiFolderPlus } from "react-icons/fi";
 import Folder from "./Folder";
-import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
-import { toast } from "react-hot-toast";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { GET_FOLDER_BY_WORKSPACEID } from "./folder.query";
 
 type Props = {
   workspaceId: string;
 };
 
-const query = gql`
-  query ($workspaceId: ID!) {
-    workspace(id: $workspaceId) {
-      name
-      folders {
-        id
-        name
-      }
-    }
-  }
-`;
-
 const FolderList = (props: Props) => {
   const { workspaceId } = props;
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery(GET_FOLDER_BY_WORKSPACEID, {
     variables: { workspaceId: workspaceId },
   });
+  const pathname = usePathname();
 
   return (
     <>
       <div className="flex justify-between items-center">
         <div>FolderList</div>
-        <button
-          type="button"
+        <Link
+          href={`${pathname}?popup=folder&action=create`}
           className="relative text-white  focus:ring-1 focus:outline-none focus:ring-blue-300 p-1 rounded-md group"
         >
           <FiFolderPlus className="text-2xl" />
-          <div className="absolute invisible group-hover:visible bg-gray-400 right-full bot-full text-white text-xs rounded-sm shadow-lg p-1">
+          <div className="absolute z-10 invisible group-hover:visible bg-gray-400 right-full bot-full text-white text-xs rounded-sm shadow-lg p-1">
             Create Folder
           </div>
-        </button>
+        </Link>
       </div>
       <ul className="flex flex-col gap-2 max-h-[720px] overflow-y-auto">
         {data?.workspace?.folders?.map((folder: any) => (

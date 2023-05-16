@@ -1,3 +1,4 @@
+import { Workspace } from "@prisma/client";
 import { builder } from "../builder";
 
 builder.prismaObject("Workspace", {
@@ -53,6 +54,9 @@ builder.mutationFields((t) => ({
     args: {
       name: t.arg.string({
         required: true,
+        validate: {
+          minLength: 3,
+        },
       }),
       ownerId: t.arg.id({
         required: true,
@@ -64,10 +68,16 @@ builder.mutationFields((t) => ({
         data: {
           name: args.name,
           ownerId: args.ownerId.toString(),
+          users: {
+            connect: {
+              id: args.ownerId.toString(),
+            },
+          },
         },
       });
     },
   }),
+
   updateWorkspace: t.prismaField({
     type: "Workspace",
     args: {
