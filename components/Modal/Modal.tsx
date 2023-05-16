@@ -6,11 +6,13 @@ import {
   CREATE_FOLDER,
   CREATE_WORKSPACE,
   DELETE_FOLDER,
+  DELETE_NOTE,
   DELETE_WORKSPACE,
 } from "./mutation";
 import toast from "react-hot-toast";
 import { GET_WORKSPACES_BY_USERID } from "../workspace/workspace.query";
 import { GET_FOLDER_BY_WORKSPACEID } from "../folders/folder.query";
+import { GET_NOTES_BY_FOLDERID } from "../notes/notes.query";
 
 const popupTypes = ["workspace", "folder", "note"];
 const actionTypes = ["create", "edit", "delete"];
@@ -24,7 +26,7 @@ const styleToasts: CSSProperties = {
 export default function WorkspaceModal() {
   const [textInput, setTextInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const { workspaceId } = useParams();
+  const { workspaceId, folderId } = useParams();
   const router = useRouter();
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -40,6 +42,10 @@ export default function WorkspaceModal() {
   // handle folder
   const [createFolder] = useMutation(CREATE_FOLDER);
   const [deleteFolder] = useMutation(DELETE_FOLDER);
+
+  // handle note
+  // const [createNote] = useMutation(CREATE_NOTE);
+  const [deleteNote] = useMutation(DELETE_NOTE);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -160,7 +166,34 @@ export default function WorkspaceModal() {
 
         handleCancel();
         break;
-
+      case "note":
+        if (action === "delete") {
+          arg
+            ? toast.promise(
+                deleteNote({
+                  variables: { deleteNoteId: arg },
+                  refetchQueries: [
+                    {
+                      query: GET_NOTES_BY_FOLDERID,
+                      variables: { folderId: folderId },
+                    },
+                  ],
+                }),
+                {
+                  loading: "Deleting note...",
+                  success: (data: any) => {
+                    console.log(data);
+                    const noteName =
+                      data?.data?.deleteNote?.contnent?.substring(0, 15) || "";
+                    return `Note ${noteName} deleted!`;
+                  },
+                  error: (error) => error.message,
+                }
+              )
+            : toast.error("Error deleting note");
+        }
+        handleCancel();
+        break;
       default:
         handleCancel();
         break;
@@ -215,7 +248,11 @@ export default function WorkspaceModal() {
                   <p className="text-sm text-gray-500 mb-4">
                     {action === "delete"
                       ? `Are you sure you want to delete this ${
-                          popup === "workspace" ? "workspace" : "folder"
+                          popup === "workspace"
+                            ? "workspace"
+                            : popup === "folder"
+                            ? "folder"
+                            : "note"
                         }?`
                       : `Enter a name for your ${
                           popup === "workspace" ? "workspace" : "folder"

@@ -69,7 +69,7 @@ const NotesList = (props: Props) => {
             </div>
           </button>
         </div>
-        <ul className="flex flex-col gap-2 max-h-[720px] overflow-y-auto">
+        <ul className="flex flex-col  gap-2 max-h-[720px] overflow-y-auto">
           {data?.folder?.notes?.map((note: any) => (
             <li key={note.id}>
               <Notes

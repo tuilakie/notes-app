@@ -35,3 +35,22 @@ export const DELETE_FOLDER = gql`
     }
   }
 `;
+
+export const CREATE_NOTE = gql`
+  mutation Mutation($content: String!, $folderId: ID!) {
+    createNote(content: $content, folderId: $folderId) {
+      content
+      id
+      updatedAt
+    }
+  }
+`;
+
+export const DELETE_NOTE = gql`
+  mutation Mutation($deleteNoteId: ID!) {
+    deleteNote(id: $deleteNoteId) {
+      id
+      content
+    }
+  }
+`;
