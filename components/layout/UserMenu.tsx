@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
 import React from "react";
+import { signOut } from "next-auth/react";
 
 type Props = {};
 
@@ -24,7 +24,7 @@ const UserMenu = (props: Props) => {
   }, []);
 
   const handleOnClickLogout = () => {
-    console.log("logout");
+    signOut({ callbackUrl: "/login" });
   };
 
   const handleOnClickAboutMe = () => {

@@ -1,5 +1,5 @@
 import Header from "@/components/layout/Header";
-import "./globals.css";
+import "../globals.css";
 import { Inter } from "next/font/google";
 import { GraphQlProvider } from "@/components/provider";
 import { Toaster } from "react-hot-toast";
