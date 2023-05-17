@@ -23,8 +23,8 @@ const Workspace = (props: Props) => {
       }
     >
       <Link
-        className="flex flex-1 text-xl truncate"
-        href={`${pathname}?popup=workspace&action=delete&arg=${props.workspaceId}`}
+        className="flex flex-1 text-xl h-full truncate"
+        href={`workspace/${props.workspaceId}`}
       >
         {props.workspaceName}
       </Link>

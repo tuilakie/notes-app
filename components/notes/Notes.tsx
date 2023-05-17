@@ -30,7 +30,13 @@ const Notes = (props: Props) => {
         <div
           className="truncate"
           dangerouslySetInnerHTML={{
-            __html: props.noteContent.substring(0, 30) || "Empty note",
+            __html:
+              // <p></p>\n
+              // get frist line of note content props.noteContent.split("\n")[0]
+              props.noteContent && props.noteContent.substring(0, 30).length > 8
+                ? // props.noteContent && props.noteContent.split("\n")[0].length > 8
+                  props.noteContent.substring(0, 30)
+                : "Empty note",
           }}
         ></div>
         <h3 className=" text-sm italic font-light truncate">

@@ -17,6 +17,8 @@ export const GET_NOTE_BY_ID = gql`
   query Query($noteId: ID!) {
     note(id: $noteId) {
       content
+      id
+      updatedAt
     }
   }
 `;

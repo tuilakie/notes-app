@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <div className="grid grid-cols-9 h-full">
         <NotesList folderId={folderId} />
-        <div className="col-span-6 py-2 px-4 bg-gray-100 dark:bg-gray-800 w-full h-full text-black">
+        <div className="col-span-6 p-2 bg-gray-100 dark:bg-gray-800 w-full h-full overflow-auto text-black">
           {children}
         </div>
       </div>

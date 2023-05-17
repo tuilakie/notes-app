@@ -39,6 +39,9 @@ builder.queryFields((t) => ({
     resolve: async (query, parent, args, ctx, info) => {
       return prisma.note.findMany({
         ...query,
+        orderBy: {
+          updatedAt: "desc",
+        },
       });
     },
   }),
