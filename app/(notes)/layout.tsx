@@ -1,7 +1,7 @@
 import Header from "@/components/layout/Header";
 import "../globals.css";
 import { Inter } from "next/font/google";
-import { GraphQlProvider } from "@/components/provider";
+import { GraphQlProvider, NextAuthProvider } from "@/components/provider";
 import { Toaster } from "react-hot-toast";
 import Modal from "@/components/Modal/Modal";
 
@@ -22,16 +22,18 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="bg-white dark:bg-slate-800 min-h-screen p-1">
           {
-            <>
-              <Header />
-              <div className="container mx-auto py-2">
-                <GraphQlProvider>
-                  <Toaster />
-                  <Modal />
-                  {children}
-                </GraphQlProvider>
-              </div>
-            </>
+            <NextAuthProvider>
+              <>
+                <Header />
+                <div className="container mx-auto py-2">
+                  <GraphQlProvider>
+                    <Toaster />
+                    <Modal />
+                    {children}
+                  </GraphQlProvider>
+                </div>
+              </>
+            </NextAuthProvider>
           }
         </div>
       </body>

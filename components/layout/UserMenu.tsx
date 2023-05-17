@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 
 type Props = {};
 
@@ -31,11 +32,21 @@ const UserMenu = (props: Props) => {
     console.log("about me");
   };
 
+  const { data: session } = useSession();
+  if (!session) return null;
   return (
     <div className="relative inline-flex cursor-pointer">
       <div className="flex items-center" onClick={() => setIsOpened(!isOpened)}>
-        <div className="text-xl font-semibold mr-2">John Doe</div>
-        <div className="w-12 h-12 rounded-full bg-gray-400"></div>
+        <div className="text-xl font-semibold mr-2">{session?.user?.name}</div>
+        {/* <Image className="w-12 h-12 rounded-full bg-gray-400"></Image> */}
+        <Image
+          loader={() => session?.user?.image || ""}
+          src={session?.user?.image || ""}
+          alt="Picture of the author"
+          className="w-12 h-12 rounded-full bg-gray-400"
+          width={50}
+          height={50}
+        />
       </div>
       <div
         className="absolute z-50 top-full text-center right-0 mt-1 rounded-lg shadow-lg bg-gray-400 text-white font-semibold opacity-70"

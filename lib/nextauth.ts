@@ -19,10 +19,41 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log("signIn", { user, account, profile, email, credentials });
-      // check sign in failed
-      return true;
+    // async signIn({ user, account, profile, email, credentials }) {
+    //   // console.log("signIn", { user, account, profile, email, credentials });
+    //   const isExist = await prisma.user.upsert({
+    //     where: { email: user.email || undefined },
+    //     create: {
+    //       email: user.email || "Anonymous",
+    //       name: user.name,
+    //       avatar: user.image,
+    //     },
+    //     update: {},
+    //   });
+    //   // add user id to session
+    //   user.id = isExist.id;
+    //   return true;
+    // },
+    session: async ({ session, user, token }) => {
+      // console.log("session", { session, user, token });
+      const userId = await prisma.user.upsert({
+        where: { email: session.user?.email || undefined },
+        create: {
+          email: session.user?.email || "Anonymous",
+          name: session.user?.name,
+          avatar: session.user?.image,
+        },
+        update: {},
+        select: { id: true },
+      });
+      const newSession = {
+        ...session,
+        user: {
+          ...session.user,
+          id: userId.id,
+        },
+      };
+      return newSession;
     },
   },
   pages: {

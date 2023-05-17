@@ -7,15 +7,16 @@ import Workspace from "./WorkSpace";
 import Link from "next/link";
 import { GET_WORKSPACES_BY_USERID } from "./workspace.query";
 import { toast } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
-type Props = {
-  userId: string;
-};
+type Props = {};
 
 const WorkspaceList = (props: Props) => {
-  const { userId } = props;
+  const { data: session } = useSession();
+
   const { data, loading, error } = useQuery(GET_WORKSPACES_BY_USERID, {
-    variables: { userId: userId },
+    // @ts-ignore
+    variables: { userId: session?.user?.id },
     onCompleted: (data) => {
       if (data?.user?.workspaces?.length === 0) {
         toast.success("You don't have any workspace yet");
