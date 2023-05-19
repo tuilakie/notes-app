@@ -2,6 +2,7 @@
 import React from "react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
@@ -28,9 +29,7 @@ const UserMenu = (props: Props) => {
     signOut({ callbackUrl: "/login" });
   };
 
-  const handleOnClickAboutMe = () => {
-    console.log("about me");
-  };
+  const router = useRouter();
 
   const { data: session } = useSession();
   if (!session) return null;
@@ -70,6 +69,22 @@ const UserMenu = (props: Props) => {
             </button>
           </div>
         </div> */}
+        <button
+          className="py-2 px-4 w-full border-b-2"
+          onClick={() => {
+            router.push("/");
+          }}
+        >
+          Workspace
+        </button>
+        <button
+          className="py-2 px-4 w-full border-b-2"
+          onClick={() => {
+            router.push("/invitation");
+          }}
+        >
+          Invitation
+        </button>
         <button
           className="py-2 px-4 w-full border-b-2"
           onClick={handleOnClickLogout}

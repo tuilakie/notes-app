@@ -32,7 +32,6 @@ model User {
   email                String                @unique
   name                 String?
   avatar               String?
-  workspaces           Workspace[]           @relation("WorkspaceUser")
   workspaceMemberships WorkspaceMembership[]
   ownedWorkspaces      Workspace[]           @relation("WorkspaceOwner")
 }
@@ -44,7 +43,6 @@ model Workspace {
   name        String
   owner       User                  @relation("WorkspaceOwner", fields: [ownerId], references: [id])
   ownerId     String
-  users       User[]                @relation("WorkspaceUser")
   memberships WorkspaceMembership[]
   folders     Folder[]
   Invitation  Invitation[]

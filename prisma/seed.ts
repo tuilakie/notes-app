@@ -109,33 +109,6 @@ async function main() {
       },
     ],
   });
-
-  await prisma.user.update({
-    where: {
-      id: "1",
-    },
-    data: {
-      workspaces: {
-        connect: [
-          {
-            id: "1",
-          },
-          {
-            id: "2",
-          },
-          {
-            id: "3",
-          },
-          {
-            id: "4",
-          },
-          {
-            id: "5",
-          },
-        ],
-      },
-    },
-  });
 }
 
 main()

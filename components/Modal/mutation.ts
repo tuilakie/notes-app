@@ -54,3 +54,12 @@ export const DELETE_NOTE = gql`
     }
   }
 `;
+
+export const CREATE_INVITATION = gql`
+  mutation Mutation($email: String!, $workspaceId: ID!) {
+    createInvitation(email: $email, workspaceId: $workspaceId) {
+      id
+      email
+    }
+  }
+`;

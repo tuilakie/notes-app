@@ -4,18 +4,20 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { CSSProperties, useEffect, useState } from "react";
 import {
   CREATE_FOLDER,
+  CREATE_INVITATION,
   CREATE_WORKSPACE,
   DELETE_FOLDER,
   DELETE_NOTE,
   DELETE_WORKSPACE,
 } from "./mutation";
 import toast from "react-hot-toast";
-import { GET_WORKSPACES_BY_USERID } from "../workspace/workspace.query";
+import { GET_WORKSPACES } from "../workspace/workspace.query";
 import { GET_FOLDER_BY_WORKSPACEID } from "../folders/folder.query";
 import { GET_NOTES_BY_FOLDERID } from "../notes/notes.query";
+import { useSession } from "next-auth/react";
 
 const popupTypes = ["workspace", "folder", "note"];
-const actionTypes = ["create", "edit", "delete"];
+const actionTypes = ["create", "edit", "delete", "invite", "leave"];
 const styleToasts: CSSProperties = {
   minWidth: "250px",
   overflow: "hidden",
@@ -28,6 +30,7 @@ export default function WorkspaceModal() {
   const [isOpen, setIsOpen] = useState(false);
   const { workspaceId, folderId } = useParams();
   const router = useRouter();
+  const { data: session } = useSession() as any;
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
@@ -38,6 +41,7 @@ export default function WorkspaceModal() {
   // hanlde workspace
   const [createWorkspace] = useMutation(CREATE_WORKSPACE);
   const [deleteWokspace] = useMutation(DELETE_WORKSPACE);
+  const [createInvitation] = useMutation(CREATE_INVITATION);
 
   // handle folder
   const [createFolder] = useMutation(CREATE_FOLDER);
@@ -54,11 +58,11 @@ export default function WorkspaceModal() {
         if (action === "create") {
           toast.promise(
             createWorkspace({
-              variables: { name: textInput, ownerId: "1" },
+              variables: { name: textInput, ownerId: session?.user?.id },
               refetchQueries: [
                 {
-                  query: GET_WORKSPACES_BY_USERID,
-                  variables: { userId: "1" },
+                  query: GET_WORKSPACES,
+                  variables: { userId: session?.user?.id },
                 },
               ],
             }),
@@ -83,8 +87,8 @@ export default function WorkspaceModal() {
                   variables: { deleteWorkspaceId: arg },
                   refetchQueries: [
                     {
-                      query: GET_WORKSPACES_BY_USERID,
-                      variables: { userId: "1" },
+                      query: GET_WORKSPACES,
+                      variables: { userId: session?.user?.id },
                     },
                   ],
                 }),
@@ -103,6 +107,24 @@ export default function WorkspaceModal() {
                 }
               )
             : toast.error("Error deleting workspace");
+        }
+        if (action === "invite") {
+          toast.promise(
+            createInvitation({
+              variables: { workspaceId, email: textInput },
+            }),
+            {
+              loading: "Sending invitation...",
+              success: (data: any) => {
+                console.log(data);
+                return `Invitation sent!`;
+              },
+              error: (error) => error.message,
+            },
+            {
+              style: styleToasts,
+            }
+          );
         }
         handleCancel();
         break;
@@ -246,8 +268,8 @@ export default function WorkspaceModal() {
                   </h3>
 
                   <p className="text-sm text-gray-500 mb-4">
-                    {action === "delete"
-                      ? `Are you sure you want to delete this ${
+                    {action === "delete" || action === "leave"
+                      ? `Are you sure you want to ${action} this ${
                           popup === "workspace"
                             ? "workspace"
                             : popup === "folder"
@@ -255,7 +277,11 @@ export default function WorkspaceModal() {
                             : "note"
                         }?`
                       : `Enter a name for your ${
-                          popup === "workspace" ? "workspace" : "folder"
+                          popup === "folder"
+                            ? "folder"
+                            : action === "invite"
+                            ? "member(email)"
+                            : "workspace"
                         }`}
                   </p>
                   {action !== "delete" && (

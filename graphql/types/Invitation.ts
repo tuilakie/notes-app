@@ -33,11 +33,40 @@ builder.queryFields((t) => ({
       });
     },
   }),
-  invitations: t.prismaField({
+  sentInvitations: t.prismaField({
     type: ["Invitation"],
+    // args: {
+    //   userId: t.arg.id({
+    //     required: true,
+    //   }),
+    // },
     resolve: async (query, parent, args, ctx, info) => {
+      // console.log(ctx.user?.id);
       return prisma.invitation.findMany({
         ...query,
+        where: {
+          workspace: {
+            ownerId: ctx.user?.id,
+          },
+        },
+      });
+    },
+  }),
+  recivedInvitations: t.prismaField({
+    type: ["Invitation"],
+    // args: {
+    //   email: t.arg.string({
+    //     required: true,
+    //   }),
+    // },
+
+    resolve: async (query, parent, args, ctx, info) => {
+      // console.log(ctx.user?.email);
+      return prisma.invitation.findMany({
+        ...query,
+        where: {
+          email: ctx.user?.email,
+        },
       });
     },
   }),

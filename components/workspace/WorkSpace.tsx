@@ -7,6 +7,8 @@ import { IoClose } from "react-icons/io5";
 type Props = {
   workspaceId: string;
   workspaceName: string;
+  owner: string;
+  totalMembers: number;
 };
 
 const Workspace = (props: Props) => {
@@ -16,17 +18,20 @@ const Workspace = (props: Props) => {
   return (
     <div
       className={
-        "relative px-6 py-4 w-full font-normal text-lg text-left rounded-lg shadow-lg hover:opacity-90" +
-        (workspaceId === props.workspaceId
-          ? " bg-orange-300 dark:bg-gray-700 text-black"
-          : " bg-white dark:bg-gray-800 text-black")
+        "relative px-6 py-4 w-full font-normal max-h-[15vh] text-lg text-left rounded-lg shadow-lg hover:bg-orange-300"
       }
     >
       <Link
-        className="flex flex-1 text-xl h-full truncate"
+        className="flex flex-col flex-1 font-semibold text-2xl h-full"
         href={`workspace/${props.workspaceId}`}
       >
         {props.workspaceName}
+        <span className="text-lg font-normal italic">
+          {"author: " + props.owner}
+        </span>
+        <span className="text-lg font-normal italic">
+          {"member: " + props.totalMembers}
+        </span>
       </Link>
       <Link
         href={`${pathname}?popup=workspace&action=delete&arg=${props.workspaceId}`}

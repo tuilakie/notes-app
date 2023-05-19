@@ -11,13 +11,9 @@ export default interface PrismaTypes {
         Where: Prisma.UserWhereInput;
         Create: {};
         Update: {};
-        RelationName: "workspaces" | "workspaceMemberships" | "ownedWorkspaces";
-        ListRelations: "workspaces" | "workspaceMemberships" | "ownedWorkspaces";
+        RelationName: "workspaceMemberships" | "ownedWorkspaces";
+        ListRelations: "workspaceMemberships" | "ownedWorkspaces";
         Relations: {
-            workspaces: {
-                Shape: Workspace[];
-                Name: "Workspace";
-            };
             workspaceMemberships: {
                 Shape: WorkspaceMembership[];
                 Name: "WorkspaceMembership";
@@ -38,15 +34,11 @@ export default interface PrismaTypes {
         Where: Prisma.WorkspaceWhereInput;
         Create: {};
         Update: {};
-        RelationName: "owner" | "users" | "memberships" | "folders" | "Invitation";
-        ListRelations: "users" | "memberships" | "folders" | "Invitation";
+        RelationName: "owner" | "memberships" | "folders" | "Invitation";
+        ListRelations: "memberships" | "folders" | "Invitation";
         Relations: {
             owner: {
                 Shape: User;
-                Name: "User";
-            };
-            users: {
-                Shape: User[];
                 Name: "User";
             };
             memberships: {

@@ -13,7 +13,6 @@ builder.prismaObject("Workspace", {
     name: t.exposeString("name"),
     owner: t.relation("owner"),
     ownerId: t.exposeID("ownerId"),
-    users: t.relation("users"),
     memberships: t.relation("memberships"),
     folders: t.relation("folders"),
     Invitation: t.relation("Invitation"),
@@ -34,17 +33,6 @@ builder.queryFields((t) => ({
         ...query,
         where: {
           id: args.id.toString(),
-        },
-      });
-    },
-  }),
-  workspaces: t.prismaField({
-    type: ["Workspace"],
-    resolve: async (query, parent, args, ctx, info) => {
-      return prisma.workspace.findMany({
-        ...query,
-        orderBy: {
-          createdAt: "asc",
         },
       });
     },
@@ -71,11 +59,6 @@ builder.mutationFields((t) => ({
         data: {
           name: args.name,
           ownerId: args.ownerId.toString(),
-          users: {
-            connect: {
-              id: args.ownerId.toString(),
-            },
-          },
         },
       });
     },
@@ -103,6 +86,7 @@ builder.mutationFields((t) => ({
       });
     },
   }),
+
   deleteWorkspace: t.prismaField({
     type: "Workspace",
     args: {
