@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 
 import prisma from "./prisma";
+import { use } from "react";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -55,6 +56,10 @@ export const authOptions: NextAuthOptions = {
       };
       return newSession;
     },
+    // async jwt({ token, account, profile }) {
+    //   console.log("jwt", { token, account, profile });
+    //   return token;
+    // },
   },
   pages: {
     signIn: "/login",

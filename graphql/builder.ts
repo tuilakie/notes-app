@@ -14,6 +14,14 @@ export const builder = new SchemaBuilder<{
     };
   };
   PrismaTypes: PrismaTypes;
+  Context: {
+    user?: {
+      id: string;
+      email: string;
+      name: string;
+      image: string;
+    };
+  };
 }>({
   plugins: [PrismaPlugin, ValidationPlugin],
   validationOptions: {
