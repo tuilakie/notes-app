@@ -1,17 +1,11 @@
-import SchemaBuilder, {
-  InputFieldMap,
-  InputShapeFromFields,
-  MaybePromise,
-} from "@pothos/core";
+import SchemaBuilder from "@pothos/core";
 import PrismaPlugin from "@pothos/plugin-prisma";
-import PrismaTypes from "@pothos/plugin-prisma/generated";
 import ValidationPlugin from "@pothos/plugin-validation";
 import prisma from "@/lib/prisma";
 
-import { DateResolver, DateTimeResolver } from "graphql-scalars";
-import { GraphQLResolveInfo } from "graphql";
-import { PubSub, withFilter } from "graphql-subscriptions";
-import { ok } from "assert";
+import { DateTimeResolver } from "graphql-scalars";
+import { PubSub } from "graphql-subscriptions";
+import PrismaTypes from "@/prisma/pothos-types";
 
 const pubsub = new PubSub();
 
