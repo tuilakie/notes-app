@@ -27,10 +27,10 @@ const Invitation = (props: Props) => {
           {sent?.sentInvitations?.map((e: any) => (
             <SentCard
               key={e.id}
-              workspaceId={e.workspace.id}
+              invitationId={e.id}
               workspaceName={e.workspace.name}
               email={e.email}
-              username={e.workspace.owner.name}
+              username={e.name}
             />
           ))}
         </div>
@@ -43,7 +43,7 @@ const Invitation = (props: Props) => {
           {recived?.recivedInvitations.map((e: any) => (
             <RecivedCard
               key={e.id}
-              workspaceId={e.workspace.id}
+              invitationId={e.id}
               workspaceName={e.workspace.name}
               email={e.email}
               username={e.workspace.owner.name}

@@ -73,6 +73,7 @@ const UserMenu = (props: Props) => {
           className="py-2 px-4 w-full border-b-2"
           onClick={() => {
             router.push("/");
+            setIsOpened(false);
           }}
         >
           Workspace
@@ -81,6 +82,7 @@ const UserMenu = (props: Props) => {
           className="py-2 px-4 w-full border-b-2"
           onClick={() => {
             router.push("/invitation");
+            setIsOpened(false);
           }}
         >
           Invitation

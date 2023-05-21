@@ -5,16 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextauth";
 
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({ schema, cache: "bounded" });
 
 const handler = startServerAndCreateNextHandler<NextRequest>(server, {
   context: async () => {
     return (await getServerSession(authOptions)) || {};
   },
 });
-
-// export const bodyParser = true;
-// // export const cors = true;
 
 export async function GET(request: NextRequest) {
   return handler(request);

@@ -21,6 +21,7 @@ export const SENT_INVITATIONS = gql`
     sentInvitations {
       email
       id
+      name
       workspace {
         id
         name

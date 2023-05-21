@@ -15,6 +15,7 @@ import { GET_WORKSPACES } from "../workspace/workspace.query";
 import { GET_FOLDER_BY_WORKSPACEID } from "../folders/folder.query";
 import { GET_NOTES_BY_FOLDERID } from "../notes/notes.query";
 import { useSession } from "next-auth/react";
+import { SENT_INVITATIONS } from "../invitation/invitation.query";
 
 const popupTypes = ["workspace", "folder", "note"];
 const actionTypes = ["create", "edit", "delete", "invite", "leave"];
@@ -112,6 +113,12 @@ export default function WorkspaceModal() {
           toast.promise(
             createInvitation({
               variables: { workspaceId, email: textInput },
+              refetchQueries: [
+                {
+                  query: SENT_INVITATIONS,
+                  variables: { workspaceId },
+                },
+              ],
             }),
             {
               loading: "Sending invitation...",
