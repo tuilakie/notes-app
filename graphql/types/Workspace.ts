@@ -29,12 +29,29 @@ builder.queryFields((t) => ({
     },
     nullable: true,
     resolve: async (query, parent, args, ctx, info) => {
-      return prisma.workspace.findUniqueOrThrow({
+      const workspace = await prisma.workspace.findFirst({
         ...query,
         where: {
-          id: args.id.toString(),
+          OR: [
+            {
+              id: args.id.toString(),
+              ownerId: ctx.user?.id,
+            },
+            {
+              memberships: {
+                some: {
+                  userId: ctx.user?.id,
+                },
+              },
+            },
+          ],
         },
       });
+
+      if (!workspace) {
+        throw new Error("Not authorized");
+      }
+      return workspace;
     },
   }),
 }));

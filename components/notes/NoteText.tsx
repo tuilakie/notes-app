@@ -15,6 +15,7 @@ import { useParams } from "next/navigation";
 import { GET_NOTE_BY_ID } from "./notes.query";
 import debounce from "lodash.debounce";
 import { UPDATE_NOTE } from "./notes.mutation";
+import toast from "react-hot-toast";
 const Editor = dynamic<EditorProps>(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
   { ssr: false }
@@ -58,6 +59,12 @@ const NoteText = (props: Props) => {
         variables: {
           updateNoteId: data.note.id,
           content: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+        },
+        onCompleted: (data) => {
+          toast.success("Note updated");
+        },
+        onError: (error) => {
+          toast.error(error.message);
         },
         refetchQueries: [
           { query: GET_NOTE_BY_ID, variables: { noteId: data.note.id } },

@@ -44,6 +44,7 @@ const Invitation = (props: Props) => {
             <RecivedCard
               key={e.id}
               invitationId={e.id}
+              workspaceId={e.workspace.id}
               workspaceName={e.workspace.name}
               email={e.email}
               username={e.workspace.owner.name}

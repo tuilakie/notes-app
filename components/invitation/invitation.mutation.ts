@@ -8,3 +8,23 @@ export const REMOVE_INVITATION = gql`
     }
   }
 `;
+
+export const ACCEPT_INVITATION = gql`
+  mutation Mutation($email: String!, $workspaceId: ID!) {
+    acceptInvitation(email: $email, workspaceId: $workspaceId) {
+      id
+      user {
+        name
+        email
+      }
+      workspace {
+        name
+        memberships {
+          user {
+            name
+          }
+        }
+      }
+    }
+  }
+`;

@@ -63,3 +63,11 @@ export const CREATE_INVITATION = gql`
     }
   }
 `;
+
+export const LEAVE_WORKSPACE = gql`
+  mutation Mutation($userId: ID!, $workspaceId: ID!) {
+    leaveMembership(userId: $userId, workspaceId: $workspaceId) {
+      id
+    }
+  }
+`;

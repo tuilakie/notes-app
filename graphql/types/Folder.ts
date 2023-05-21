@@ -26,23 +26,38 @@ builder.queryFields((t) => ({
     },
     nullable: true,
     resolve: async (query, parent, args, ctx, info) => {
-      return prisma.folder.findUniqueOrThrow({
+      const folder = await prisma.folder.findUniqueOrThrow({
         ...query,
         where: {
           id: args.id.toString(),
         },
       });
-    },
-  }),
-  folders: t.prismaField({
-    type: ["Folder"],
-    resolve: async (query, parent, args, ctx, info) => {
-      return prisma.folder.findMany({
-        ...query,
-        orderBy: {
-          createdAt: "desc",
+      const authorized = await prisma.user.findFirst({
+        where: {
+          OR: [
+            {
+              ownedWorkspaces: {
+                some: {
+                  id: folder.workspaceId,
+                  ownerId: ctx.user?.id,
+                },
+              },
+            },
+            {
+              workspaceMemberships: {
+                some: {
+                  workspaceId: folder.workspaceId,
+                  userId: ctx.user?.id,
+                },
+              },
+            },
+          ],
         },
       });
+      if (!authorized) {
+        throw new Error("Not authorized");
+      }
+      return folder;
     },
   }),
 }));

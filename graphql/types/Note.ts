@@ -26,25 +26,58 @@ builder.queryFields((t) => ({
     },
     nullable: true,
     resolve: async (query, parent, args, ctx, info) => {
-      return prisma.note.findUniqueOrThrow({
+      const note = await prisma.note.findUniqueOrThrow({
         ...query,
         where: {
           id: args.id.toString(),
         },
       });
-    },
-  }),
-  notes: t.prismaField({
-    type: ["Note"],
-    resolve: async (query, parent, args, ctx, info) => {
-      return prisma.note.findMany({
-        ...query,
-        orderBy: {
-          updatedAt: "desc",
+      const folder = await prisma.folder.findUniqueOrThrow({
+        where: {
+          id: note.folderId.toString(),
         },
       });
+
+      const authorized = await prisma.user.findFirst({
+        where: {
+          OR: [
+            {
+              ownedWorkspaces: {
+                some: {
+                  id: folder.workspaceId,
+                  ownerId: ctx.user?.id,
+                },
+              },
+            },
+            {
+              workspaceMemberships: {
+                some: {
+                  workspaceId: folder.workspaceId,
+                  userId: ctx.user?.id,
+                },
+              },
+            },
+          ],
+        },
+      });
+      if (!authorized) {
+        throw new Error("Not authorized");
+      }
+
+      return note;
     },
   }),
+  // notes: t.prismaField({
+  //   type: ["Note"],
+  //   resolve: async (query, parent, args, ctx, info) => {
+  //     return prisma.note.findMany({
+  //       ...query,
+  //       orderBy: {
+  //         updatedAt: "desc",
+  //       },
+  //     });
+  //   },
+  // }),
 }));
 
 builder.mutationFields((t) => ({
@@ -83,6 +116,50 @@ builder.mutationFields((t) => ({
       }),
     },
     resolve: async (query, parent, args, ctx, info) => {
+      // check if user is authorized to update note
+      const users = await prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              ownedWorkspaces: {
+                some: {
+                  folders: {
+                    some: {
+                      notes: {
+                        some: {
+                          id: args.id.toString(),
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            {
+              workspaceMemberships: {
+                some: {
+                  role: "READ_WRITE",
+                  workspace: {
+                    folders: {
+                      some: {
+                        notes: {
+                          some: {
+                            id: args.id.toString(),
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        },
+      });
+      if (!users.find((user) => user.id === ctx.user?.id)) {
+        throw new Error("Not authorized");
+      }
+
       return prisma.note.update({
         ...query,
         where: {
@@ -102,6 +179,48 @@ builder.mutationFields((t) => ({
       }),
     },
     resolve: async (query, parent, args, ctx, info) => {
+      const users = await prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              ownedWorkspaces: {
+                some: {
+                  folders: {
+                    some: {
+                      notes: {
+                        some: {
+                          id: args.id.toString(),
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            {
+              workspaceMemberships: {
+                some: {
+                  role: "READ_WRITE",
+                  workspace: {
+                    folders: {
+                      some: {
+                        notes: {
+                          some: {
+                            id: args.id.toString(),
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        },
+      });
+      if (!users.find((user) => user.id === ctx.user?.id)) {
+        throw new Error("Not authorized");
+      }
       return prisma.note.delete({
         ...query,
         where: {

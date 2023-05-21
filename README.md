@@ -2,14 +2,28 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+After clone the repository, run the following command to install the dependencies:
+
+```bash
+npm install
+```
+
+run docker-compose or config in DATABASE_URL .env
+
+```bash
+docker-compose up -d
+```
+
+migration database
+
+```bash
+npx prisma migrate dev
+```
+
+let's start the app.
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

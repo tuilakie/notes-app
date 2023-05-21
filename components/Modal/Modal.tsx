@@ -9,6 +9,7 @@ import {
   DELETE_FOLDER,
   DELETE_NOTE,
   DELETE_WORKSPACE,
+  LEAVE_WORKSPACE,
 } from "./mutation";
 import toast from "react-hot-toast";
 import { GET_WORKSPACES } from "../workspace/workspace.query";
@@ -43,6 +44,7 @@ export default function WorkspaceModal() {
   const [createWorkspace] = useMutation(CREATE_WORKSPACE);
   const [deleteWokspace] = useMutation(DELETE_WORKSPACE);
   const [createInvitation] = useMutation(CREATE_INVITATION);
+  const [leaveWorkspace] = useMutation(LEAVE_WORKSPACE);
 
   // handle folder
   const [createFolder] = useMutation(CREATE_FOLDER);
@@ -133,6 +135,32 @@ export default function WorkspaceModal() {
             }
           );
         }
+        if (action === "leave") {
+          toast.promise(
+            leaveWorkspace({
+              variables: { workspaceId, userId: session?.user?.id },
+              refetchQueries: [
+                {
+                  query: GET_WORKSPACES,
+                  variables: { userId: session?.user?.id },
+                },
+              ],
+            }),
+            {
+              loading: "Leaving workspace...",
+              success: (data: any) => {
+                console.log(data);
+                router.push("/");
+                return `You left the workspace!`;
+              },
+              error: (error) => error.message,
+            },
+            {
+              style: styleToasts,
+            }
+          );
+        }
+
         handleCancel();
         break;
       case "folder":
@@ -291,7 +319,7 @@ export default function WorkspaceModal() {
                             : "workspace"
                         }`}
                   </p>
-                  {action !== "delete" && (
+                  {action !== "delete" && action !== "leave" && (
                     <input
                       type="text"
                       name="textInput"
