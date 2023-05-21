@@ -4,7 +4,7 @@ import SchemaBuilder, {
   MaybePromise,
 } from "@pothos/core";
 import PrismaPlugin from "@pothos/plugin-prisma";
-import type PrismaTypes from "@pothos/plugin-prisma/generated";
+import PrismaTypes from "@pothos/plugin-prisma/generated";
 import ValidationPlugin from "@pothos/plugin-validation";
 import prisma from "@/lib/prisma";
 

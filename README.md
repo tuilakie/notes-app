@@ -11,6 +11,7 @@ npm install
 run docker-compose or config in DATABASE_URL .env
 
 ```bash
+touch .env && cp .env.example .env
 docker-compose up -d
 ```
 
