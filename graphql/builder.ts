@@ -4,10 +4,7 @@ import ValidationPlugin from "@pothos/plugin-validation";
 import prisma from "@/lib/prisma";
 
 import { DateTimeResolver } from "graphql-scalars";
-import { PubSub } from "graphql-subscriptions";
 import PrismaTypes from "@/prisma/pothos-types";
-
-const pubsub = new PubSub();
 
 export const builder = new SchemaBuilder<{
   Scalars: {
@@ -52,20 +49,7 @@ builder.queryType({
 builder.mutationType({
   fields: (t) => ({
     ok: t.boolean({
-      resolve: () => {
-        pubsub.publish("ok", {
-          ok: true,
-        });
-        return true;
-      },
+      resolve: () => true,
     }),
   }),
 });
-
-builder.subscriptionType({});
-builder.subscriptionField("ok", (t) =>
-  t.boolean({
-    subscribe: () => pubsub.asyncIterator("ok") as any,
-    resolve: () => true,
-  })
-);

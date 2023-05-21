@@ -27,7 +27,6 @@
     "eslint-config-next": "13.4.1",
     "graphql": "^16.6.0",
     "graphql-scalars": "^1.21.3",
-    "graphql-subscriptions": "^2.0.0",
     "graphql-tag": "^2.12.6",
     "lodash.debounce": "^4.0.8",
     "moment": "^2.29.4",
