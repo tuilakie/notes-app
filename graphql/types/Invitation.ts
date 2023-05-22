@@ -1,5 +1,5 @@
-import { Invitation } from "@prisma/client";
 import { builder } from "../builder";
+import prisma from "@/lib/prisma";
 
 builder.prismaObject("Invitation", {
   fields: (t) => ({

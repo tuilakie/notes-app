@@ -1,5 +1,5 @@
-import { use } from "react";
 import { builder } from "../builder";
+import prisma from "@/lib/prisma";
 
 builder.prismaObject("WorkspaceMembership", {
   fields: (t) => ({

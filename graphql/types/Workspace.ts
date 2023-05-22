@@ -1,5 +1,5 @@
-import { Workspace } from "@prisma/client";
 import { builder } from "../builder";
+import prisma from "@/lib/prisma";
 
 builder.prismaObject("Workspace", {
   fields: (t) => ({
