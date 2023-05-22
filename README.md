@@ -28,6 +28,7 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![image](https://github.com/tuilakie/notes-app/assets/68368863/e25a56f9-d3d7-4ffb-bbb5-548a2e503b3e)
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
